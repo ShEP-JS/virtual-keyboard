@@ -111,6 +111,7 @@ body {
 .active {
   background-color: #fff;
   color: black;
+  border-radius: 50px;
 }
 
 .remove {
@@ -140,5 +141,5 @@ body {
 }
 
 .new {
-  animation: new_animation 0.5s forwards;
+  animation: new_animation 0.7s forwards;
 }
