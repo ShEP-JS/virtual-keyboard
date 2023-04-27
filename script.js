@@ -6,7 +6,7 @@ body.appendChild(title);
 const textArea = document.createElement("textarea");
 textArea.setAttribute("id", "rows", "cols", "autofocus");
 textArea.id = "textarea";
-textArea.rows = "10";
+textArea.rows = "8";
 textArea.cols = "33";
 body.appendChild(textArea);
 const keyboard = document.createElement("div");
@@ -122,7 +122,6 @@ async function getButtonsInfo(create) {
   }
   setButtons();
 }
-getButtonsInfo(true);
 
 function CapsLock() {
   const buttons = document.querySelectorAll(".button");
@@ -259,22 +258,38 @@ function shiftButtons(capsActive) {
 
 let text = [];
 document.addEventListener("click", (e) => {
+  let position = textArea.selectionStart;
   if (!e.target.classList.contains("button")) {
     return;
   }
+  let newPosition = position;
   if (e.target.getAttribute("arrow") !== null) {
     text.push(e.target.getAttribute("arrow"));
   } else if (!e.target.classList.contains("notprint")) {
-    text.push(e.target.textContent);
+    text.splice(position, 0, e.target.textContent);
+    newPosition += 1;
   } else if (e.target.textContent === "Backspace") {
-    text = text.slice(0, -1);
+    if (newPosition <= 0) {
+      newPosition = 0;
+    } else {
+      text.splice(position - 1, 1);
+      newPosition -= 1;
+    }
+    document.getElementById("textarea").focus();
+  } else if (e.target.textContent === "Del") {
+    text.splice(position, 1);
+    document.getElementById("textarea").focus();
   } else if (e.target.textContent === "Tab") {
-    text.push("    ");
+    text.splice(position, 0, "\t");
+    newPosition += 1;
   } else if (e.target.textContent === "Enter") {
-    text.push("\n");
+    text.splice(position, 0, "\n");
+    newPosition += 1;
   }
   console.log(text);
   textArea.value = text.join("");
+
+  textArea.selectionStart = textArea.selectionEnd = newPosition;
 
   e.target.classList.add("new");
   setTimeout(() => {
@@ -309,3 +324,28 @@ function langChange() {
 
   getButtonsInfo(false);
 }
+
+const infoOc = document.createElement("h2");
+infoOc.classList.add("subtitle");
+infoOc.textContent = "Клавиатура создана в операционной системе Windows";
+body.appendChild(infoOc);
+
+const infoLang = document.createElement("h2");
+infoLang.classList.add("subtitle");
+infoLang.textContent = "Для переключения языка комбинация: левыe ctrl + alt";
+body.appendChild(infoLang);
+
+function setLocalStorage() {
+  localStorage.setItem("language", lang);
+}
+window.addEventListener("beforeunload", setLocalStorage);
+
+function getLocalStorage() {
+  if (localStorage.getItem("language")) {
+    lang = localStorage.getItem("language");
+  }
+}
+window.addEventListener("load", () => {
+  getLocalStorage();
+  getButtonsInfo(true);
+});
