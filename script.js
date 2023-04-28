@@ -55,22 +55,22 @@ function createButtons() {
     }
     if (i === 53) {
       button.setAttribute("arrow", "🠕");
-      button.classList.add("uparrow");
+      button.classList.add("arrowup");
       button.classList.add("darkbutton");
     }
     if (i === 62) {
       button.setAttribute("arrow", "🠗");
-      button.classList.add("downarrow");
+      button.classList.add("arrowdown");
       button.classList.add("darkbutton");
     }
     if (i === 61) {
       button.setAttribute("arrow", "🠔");
-      button.classList.add("leftarrow");
+      button.classList.add("arrowleft");
       button.classList.add("darkbutton");
     }
     if (i === 63) {
       button.setAttribute("arrow", "🠖");
-      button.classList.add("rightarrow");
+      button.classList.add("arrowright");
       button.classList.add("darkbutton");
     }
     if (data[i] === "Del") {
@@ -257,18 +257,17 @@ function shiftButtons(capsActive) {
 }
 
 let text = [];
-document.addEventListener("click", (e) => {
-  let position = textArea.selectionStart;
-  if (!e.target.classList.contains("button")) {
-    return;
-  }
+
+function processTarget(target) {
+  const position = textArea.selectionStart;
   let newPosition = position;
-  if (e.target.getAttribute("arrow") !== null) {
-    text.push(e.target.getAttribute("arrow"));
-  } else if (!e.target.classList.contains("notprint")) {
-    text.splice(position, 0, e.target.textContent);
+  if (target.getAttribute("arrow") !== null) {
+    text.splice(position, 0, target.getAttribute("arrow"));
     newPosition += 1;
-  } else if (e.target.textContent === "Backspace") {
+  } else if (!target.classList.contains("notprint")) {
+    text.splice(position, 0, target.textContent);
+    newPosition += 1;
+  } else if (target.textContent === "Backspace") {
     if (newPosition <= 0) {
       newPosition = 0;
     } else {
@@ -276,36 +275,43 @@ document.addEventListener("click", (e) => {
       newPosition -= 1;
     }
     document.getElementById("textarea").focus();
-  } else if (e.target.textContent === "Del") {
+  } else if (target.textContent === "Del") {
     text.splice(position, 1);
     document.getElementById("textarea").focus();
-  } else if (e.target.textContent === "Tab") {
+  } else if (target.textContent === "Tab") {
     text.splice(position, 0, "\t");
     newPosition += 1;
-  } else if (e.target.textContent === "Enter") {
+  } else if (target.textContent === "Enter") {
     text.splice(position, 0, "\n");
     newPosition += 1;
   }
-  console.log(text);
+
   textArea.value = text.join("");
-
+  console.log(textArea.value.length, text.length);
   textArea.selectionStart = textArea.selectionEnd = newPosition;
-
-  e.target.classList.add("new");
+  console.log(textArea.selectionStart, textArea.selectionEnd);
+  target.classList.add("new");
   setTimeout(() => {
-    e.target.classList.remove("new");
+    target.classList.remove("new");
   }, 100);
-  if (e.target.textContent === "CapsLock" || e.target.textContent === "Shift") {
-    e.target.classList.toggle("active");
+  if (target.textContent === "CapsLock" || target.textContent === "Shift") {
+    target.classList.toggle("active");
     CapsLock();
   }
   if (
-    e.target.classList.contains("leftctrl") ||
-    e.target.classList.contains("leftalt")
+    target.classList.contains("leftctrl") ||
+    target.classList.contains("leftalt")
   ) {
-    e.target.classList.toggle("active");
+    target.classList.toggle("active");
     langChange();
   }
+}
+document.addEventListener("click", (e) => {
+  if (!e.target.classList.contains("button")) {
+    return;
+  }
+
+  processTarget(e.target);
 });
 
 function langChange() {
@@ -348,4 +354,55 @@ function getLocalStorage() {
 window.addEventListener("load", () => {
   getLocalStorage();
   getButtonsInfo(true);
+});
+
+function specialKeyDown(e) {
+  let target;
+  if (e.code === "ShiftLeft") {
+    target = document.querySelector(".leftshift");
+  }
+  if (e.code === "ShiftRight") {
+    target = document.querySelector(".rightshift");
+  }
+  if (e.code === "AltRight") {
+    target = document.querySelector(".rightalt");
+  }
+  if (e.code === "AltLeft") {
+    target = document.querySelector(".leftalt");
+  }
+  if (e.code === "ControlRight") {
+    target = document.querySelector(".rightctrl");
+  }
+  if (e.code === "ControlLeft") {
+    target = document.querySelector(".leftctrl");
+  }
+  return target;
+}
+window.addEventListener("keydown", (e) => {
+  const buttons = document.querySelectorAll(".button");
+  let target;
+  if (e.key === "Shift" || e.key === "Control" || e.key === "Alt") {
+    target = specialKeyDown(e);
+  } else {
+    for (let i = 0; i < buttons.length; i++) {
+      if (
+        e.key === buttons[i].getAttribute("buttonname") ||
+        e.key === buttons[i].getAttribute("upperCaseName") ||
+        buttons[i].classList.contains(e.key.toLowerCase()) ||
+        (e.key === "Delete" && buttons[i].getAttribute("buttonname") === "Del")
+      ) {
+        target = buttons[i];
+        break;
+      }
+    }
+  }
+
+  console.log(target);
+  console.log(e.key);
+  console.log(e.code);
+
+  if (target != null) {
+    e.preventDefault();
+    processTarget(target);
+  }
 });

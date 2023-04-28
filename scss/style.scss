@@ -98,20 +98,20 @@ body {
 .darkbutton {
   background-color: rgb(48, 46, 46);
 }
-.uparrow::after {
+.arrowup::after {
   content: "\27A4";
   rotate: -90deg;
 }
 
-.downarrow::after {
+.arrowdown::after {
   content: "\27A4";
   rotate: 90deg;
 }
-.leftarrow::after {
+.arrowleft::after {
   content: "\27A4";
   rotate: 180deg;
 }
-.rightarrow::after {
+.arrowright::after {
   content: "\27A4";
 }
 
