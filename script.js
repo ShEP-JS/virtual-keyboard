@@ -258,7 +258,7 @@ function shiftButtons(capsActive) {
 
 let text = [];
 
-function processTarget(target) {
+function processTarget(target, action) {
   const position = textArea.selectionStart;
   let newPosition = position;
   if (target.getAttribute("arrow") !== null) {
@@ -288,16 +288,30 @@ function processTarget(target) {
 
   textArea.value = text.join("");
   console.log(textArea.value.length, text.length);
-  textArea.selectionStart = textArea.selectionEnd = newPosition;
+  textArea.selectionStart = newPosition;
+  textArea.selectionEnd = newPosition;
   console.log(textArea.selectionStart, textArea.selectionEnd);
   target.classList.add("new");
   setTimeout(() => {
     target.classList.remove("new");
   }, 100);
-  if (target.textContent === "CapsLock" || target.textContent === "Shift") {
+  if (target.textContent === "CapsLock") {
     target.classList.toggle("active");
     CapsLock();
   }
+  if (target.textContent === "Shift") {
+    if (action === "click") {
+      target.classList.toggle("active");
+      CapsLock();
+    } else if (action === "keydown" && !target.classList.contains("active")) {
+      target.classList.add("active");
+      CapsLock();
+    } else if (action === "keyup" && target.classList.contains("active")) {
+      target.classList.remove("active");
+      CapsLock();
+    }
+  }
+
   if (
     target.classList.contains("leftctrl") ||
     target.classList.contains("leftalt")
@@ -311,7 +325,7 @@ document.addEventListener("click", (e) => {
     return;
   }
 
-  processTarget(e.target);
+  processTarget(e.target, "click");
 });
 
 function langChange() {
@@ -384,7 +398,7 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "Shift" || e.key === "Control" || e.key === "Alt") {
     target = specialKeyDown(e);
   } else {
-    for (let i = 0; i < buttons.length; i++) {
+    for (let i = 0; i < buttons.length; i += 1) {
       if (
         e.key === buttons[i].getAttribute("buttonname") ||
         e.key === buttons[i].getAttribute("upperCaseName") ||
@@ -397,12 +411,20 @@ window.addEventListener("keydown", (e) => {
     }
   }
 
-  console.log(target);
-  console.log(e.key);
-  console.log(e.code);
+  if (target != null) {
+    e.preventDefault();
+    processTarget(target, "keydown");
+  }
+});
+
+window.addEventListener("keyup", (e) => {
+  let target;
+  if (e.key === "Shift") {
+    target = specialKeyDown(e);
+  }
 
   if (target != null) {
     e.preventDefault();
-    processTarget(target);
+    processTarget(target, "keyup");
   }
 });
