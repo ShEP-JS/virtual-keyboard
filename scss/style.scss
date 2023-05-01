@@ -25,11 +25,19 @@ body {
   text-align: center;
   margin-top: 10px;
 }
+.info_text {
+  max-width: 1000px;
+  font-size: 1.6rem;
+  color: black;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 10px;
+}
 #textarea {
   display: block;
   width: 1000px;
   margin: 0 auto;
-  margin-top: 50px;
+  margin-top: 20px;
   padding: 5px 10px;
   font-size: 2.2rem;
 }

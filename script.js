@@ -100,7 +100,7 @@ function createButtons() {
 
 function setButtons() {
   const buttons = document.querySelectorAll(".button");
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i += 1) {
     const button = buttons[i];
     button.textContent = `${data[i]}`;
     button.setAttribute("buttonname", button.innerText);
@@ -244,7 +244,7 @@ function shiftInActive(capsActive) {
 }
 
 function shiftButtons(capsActive) {
-  let shiftActive = document.querySelectorAll(".shift.active").length > 0;
+  const shiftActive = document.querySelectorAll(".shift.active").length > 0;
   if (shiftActive) {
     if (lang === "en") {
       shiftActiveEn();
@@ -256,7 +256,7 @@ function shiftButtons(capsActive) {
   }
 }
 
-let text = [];
+const text = [];
 
 function processTarget(target, action) {
   const position = textArea.selectionStart;
@@ -287,10 +287,8 @@ function processTarget(target, action) {
   }
 
   textArea.value = text.join("");
-  console.log(textArea.value.length, text.length);
   textArea.selectionStart = newPosition;
   textArea.selectionEnd = newPosition;
-  console.log(textArea.selectionStart, textArea.selectionEnd);
   target.classList.add("new");
   setTimeout(() => {
     target.classList.remove("new");
@@ -354,6 +352,12 @@ const infoLang = document.createElement("h2");
 infoLang.classList.add("subtitle");
 infoLang.textContent = "Для переключения языка комбинация: левыe ctrl + alt";
 body.appendChild(infoLang);
+
+const infoWarn = document.createElement("h3");
+infoWarn.classList.add("info_text");
+infoWarn.textContent =
+  "при несовпадении языка ОС и экранной клавиатуры возможен ввод только с помощью мыши. для разблокировки ввода c физической клавиатуры измените язык ОС или экранной клавиатуры, чтобы их значения совпали";
+body.appendChild(infoWarn);
 
 function setLocalStorage() {
   localStorage.setItem("language", lang);
