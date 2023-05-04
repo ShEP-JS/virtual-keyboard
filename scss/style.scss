@@ -1,0 +1,160 @@
+html {
+  font-size: 10px;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
+body {
+  margin: 0 auto;
+}
+.title {
+  font-size: 3.2rem;
+  color: black;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 20px;
+}
+.subtitle {
+  font-size: 2.4rem;
+  color: black;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 10px;
+}
+.info_text {
+  max-width: 1000px;
+  font-size: 1.6rem;
+  color: black;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 10px;
+}
+#textarea {
+  display: block;
+  width: 1000px;
+  margin: 0 auto;
+  margin-top: 20px;
+  padding: 5px 10px;
+  font-size: 2.2rem;
+}
+
+.keyboard {
+  width: 1008px;
+  margin: 0 auto;
+  margin-top: 30px;
+  background-color: blanchedalmond;
+  border: 2px solid black;
+  border-radius: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.button {
+  width: 60px;
+  height: 60px;
+  border-radius: 3px;
+  color: white;
+  background-color: #3b3939;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.4rem;
+}
+
+.button:hover {
+  transition: 0.3s;
+  background-color: #d3cbcb;
+  color: #000000;
+}
+
+.bigbutton {
+  width: 125px;
+  background-color: rgb(48, 46, 46);
+}
+.space {
+  width: 346px;
+}
+
+.tab {
+  width: 70px;
+  background-color: rgb(48, 46, 46);
+}
+
+.leftshift {
+  width: 160px;
+  background-color: rgb(48, 46, 46);
+}
+
+.rightshift {
+  width: 70px;
+  background-color: rgb(48, 46, 46);
+}
+
+.funcbutton {
+  width: 65px;
+  background-color: rgb(48, 46, 46);
+}
+.darkbutton {
+  background-color: rgb(48, 46, 46);
+}
+.arrowup::after {
+  content: "\27A4";
+  rotate: -90deg;
+}
+
+.arrowdown::after {
+  content: "\27A4";
+  rotate: 90deg;
+}
+.arrowleft::after {
+  content: "\27A4";
+  rotate: 180deg;
+}
+.arrowright::after {
+  content: "\27A4";
+}
+
+.active {
+  background-color: #fff;
+  color: black;
+  border-radius: 50px;
+}
+
+.remove {
+  animation: button_animation 0.5s forwards;
+}
+
+@keyframes button_animation {
+  0% {
+    background-color: #ffffff;
+    color: #000000;
+  }
+  100% {
+    background-color: #3b3939;
+    color: #ffffff;
+  }
+}
+
+@keyframes new_animation {
+  0% {
+    background-color: #ffffff;
+    color: #000000;
+  }
+  100% {
+    background-color: #3b3939;
+    color: #ffffff;
+  }
+}
+
+.new {
+  animation: new_animation 0.7s forwards;
+}
